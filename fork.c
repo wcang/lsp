@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/wait.h>
 
 static void child_process(int fd)
 {
@@ -20,7 +21,13 @@ static void child_process(int fd)
 	}
 
 	close(fd);
-	exit(0);
+
+	if (getpid() % 2) {
+		exit(0);
+	}
+	else {	/* purposely abort to show different behaviour on parent */
+		abort();
+	}
 }
 
 
@@ -28,6 +35,7 @@ int main(int argc, char * argv[])
 {
 	int i;
 	int fd;
+	int status;
 	pid_t child_pid[10];
 
 	fd = open("child.log", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
@@ -53,7 +61,21 @@ int main(int argc, char * argv[])
 	}
 
 	close(fd);
-	pause();
+	/* strictly speaking the sleep isn't necessary */
+	sleep(2);
+	printf("=================================================\n");	
+
+	for (i = 0; i < 10; ++i) {
+		waitpid(child_pid[i], &status, 0);
+
+		if (WIFEXITED(status)) {
+			printf("Child %d exited with status %u\n", child_pid[i], WEXITSTATUS(status));
+		}
+		else if (WIFSIGNALED(status)) {
+			printf("Child %d killed by signal %d\n", child_pid[i], WTERMSIG(status));
+		}
+	}
+
 	return 0;
 }
 
