@@ -12,7 +12,7 @@ static void child_process(int fd)
 	int i;
 	char buffer[100];
 
-	printf("PID: %u\n", getpid());
+	printf("PID: %u, Parent PID: %u\n", getpid(), getppid());
 
 	for (i = 0; i < 10; ++i) {
 		snprintf(buffer, sizeof(buffer), "%u: %d\n", getpid(), i);
@@ -47,7 +47,9 @@ int main(int argc, char * argv[])
 			fprintf(stderr, "Oops... Labour pain. Cannot give birth to child: %s\n", strerror(errno));
 			exit(1);
 		}
-		/* parent proceeds with the loop */	
+		else { /* parent proceeds with the loop */
+			printf("Created child with PID %u\n", child_pid[i]);
+		}
 	}
 
 	close(fd);
