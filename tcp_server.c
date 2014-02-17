@@ -103,6 +103,30 @@ void process_client(int client_fd)
 }
 
 
+static void signal_handler(int signum)
+{
+	if (signum == SIGTERM) {
+		printf("Terminate\n");
+		term = 1;
+	}
+}
+
+
+
+static void install_sighandler(void)
+{
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = signal_handler;
+	//sa.sa_flags = SA_RESTART;
+	
+	if (sigaction(SIGTERM, &sa, NULL) == -1) {
+		fprintf(stderr, "Unable to install signal handler for SIGTERM: %m\n");
+		exit(1);
+	}
+}
+
 
 int main(int argc, char * argv[])
 {
@@ -126,6 +150,7 @@ int main(int argc, char * argv[])
 		exit(1);
 	}
 
+	install_sighandler();
 	server_fd = setup_server(caddr, port);
 
 	while (!term) {
