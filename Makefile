@@ -1,4 +1,4 @@
-all: error copy open fork orphan tcp_server tcp_client udp_server udp_client
+all: error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe
 
 error: error.c
 	gcc -g -O0 -Wall -o error error.c
@@ -24,6 +24,9 @@ tcp_client: tcp_client.c
 udp_server: udp_server.c
 	gcc -g -O0 -Wall -o udp_server udp_server.c
 
+pipe: pipe.c
+	gcc -g -O0 -Wall -o pipe pipe.c
+
 clean:
-	rm -rf error copy open fork orphan tcp_server tcp_client udp_server udp_client
+	rm -rf error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe
 
