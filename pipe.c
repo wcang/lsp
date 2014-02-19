@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 			close(pipefd[1]); /* close the writing end of the pipe */
 			dup2(pipefd[0], 0); /* close stdin, duplicate reading end of pipe to stdin */
 			close(pipefd[0]);  /* it's now okay to close duplicated pipe */
-			execlp("wc" , "wc", "-l", (char *) NULL);
+			execlp("tr" , "tr", "[:lower:]", "[:upper:]", (char *) NULL);
 			break;
 		default: /* parent process */
 			close(pipefd[0]); /* close the reading end of the pipe */
