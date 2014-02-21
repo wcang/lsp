@@ -1,4 +1,4 @@
-all: error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe dup_prank
+all: error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe dup_prank select
 
 error: error.c
 	gcc -g -O0 -Wall -o error error.c
@@ -33,6 +33,9 @@ dup_prank: dup_prank.c
 udp_client: udp_client.c
 	gcc -g -O0 -Wall -o udp_client udp_client.c
 
+select: select.c
+	gcc -g -O0 -Wall -o select select.c
+
 clean:
-	rm -rf error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe dup_prank
+	rm -rf error copy open fork orphan tcp_server tcp_client udp_server udp_client pipe dup_prank select
 
